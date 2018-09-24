@@ -15,12 +15,24 @@ function makeNewButtons(){
         newButton.text(catagoryArray[i]).val();
         $('#buttonsArea').append(newButton);
     }
+    goGetGif();
 }
 
 makeNewButtons();
 
+$('#newGifValue').on('click', function(event){
+    event.preventDefault();
+    var newGif = $('#gifInput').val();
+    console.log(newGif);
+    catagoryArray.push(newGif);
+    makeNewButtons();
+    console.log(catagoryArray);
+})
 
-$('button').on('click', function() {
+function goGetGif(){
+
+
+$('.catagoryButton').on('click', function() {
     var searchItem = $(this).attr('data-name');
     
     var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=rUGDSJQ6ygNJgDewflUlFnfEcjceivwp&q=' + searchItem +'&limit=10&offset=0&rating=G&lang=en'
@@ -61,17 +73,10 @@ $('button').on('click', function() {
         })
     });
 });
+}
 
 
 
-
-$('#newGifValue').on('click', function(event){
-    event.preventDefault();
-    var newGif = $('#gifInput').val();
-    console.log(newGif);
-    catagoryArray.push(newGif);
-    makeNewButtons();
-})
     
 
 
