@@ -4,7 +4,44 @@
 ///////////////////////////////////////////////////////////////
 
 const catagoryArray = ['cats', 'dogs', 'birds'];
+const dropDownArray = ['one', 'two', 'three'];
 console.log(catagoryArray);
+
+function newNavItem(item) {
+   var mainDropDown = $('<li>');
+   mainDropDown.addClass("nav-item dropdown");
+   var catagDropDown = $('<a>');
+   catagDropDown.addClass("nav-link dropdown-toggle");
+   catagDropDown.attr('id', 'navbarDropdown');
+   catagDropDown.attr('role', 'button');
+   catagDropDown.attr('data-toggle', 'dropdown');
+   catagDropDown.attr('aria-haspopup', 'true');
+   catagDropDown.attr('aria-expanded', 'false');
+   catagDropDown.text(item);
+   mainDropDown.append(catagDropDown);
+   $('#theDropDown').append(mainDropDown);
+
+
+   // add a for loop to a new array
+   for(let i = 0; i < dropDownArray.length; i++){
+    var dropwDownDiv = $('<div>');
+   dropwDownDiv.addClass('dropdown-menu');
+   dropwDownDiv.attr('aria-labelledby', 'navbarDropdown');
+   var dropDownDivButton = $('<button>');
+   dropDownDivButton.addClass('dropdown-item');
+   dropDownDivButton.text(dropDownArray);
+   dropwDownDiv.append(dropDownDivButton);
+   catagDropDown.append(dropwDownDiv);
+   
+   }
+   console.log(dropDownArray);
+   
+
+}
+
+newNavItem('lizards');
+
+
 
 function makeNewButtons() {
     $('#buttonsArea').empty();
