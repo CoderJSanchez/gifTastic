@@ -45,19 +45,22 @@ $('.catagoryButton').on('click', function() {
         console.log(response);
 
         for (var i = 0; i < returnData.length; i++) {
+            var dropGifs = $('<div>');
+            dropGifs.addClass('col-md-3');
             var showImage = $('<img>');
-            showImage.addClass('mb-4');
+            showImage.addClass('mb-2');
             showImage.attr('src', returnData[i].images.fixed_height_still.url);
             showImage.attr('data-still', returnData[i].images.fixed_height_still.url);
             showImage.attr('data-animate', returnData[i].images.fixed_height.url);
             showImage.attr('data-state', 'still');
             showImage.addClass('gif');
+            dropGifs.append(showImage);
 
             var rating = $('<p>');
-            rating.addClass('col-md-3');
-            rating.text(returnData[i].rating);
-            //showImage.prepend(rating);
-            $('#gifArea').append(showImage, rating);
+            rating.text('Rating: ' + returnData[i].rating.toUpperCase());
+            dropGifs.prepend(rating);
+            $('#gifArea').append(dropGifs);
+            
         }
         $('.gif').on('click', function(){
             var state = $(this).attr('data-state');

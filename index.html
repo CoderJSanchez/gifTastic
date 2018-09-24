@@ -12,18 +12,21 @@
   </head>
   <body>
 
-    <div id = 'buttonsArea' class = 'mb-4'></div>
-    <div class = 'container'>
-    <form>
-        <div class="form-group">
-            
-            <input type="text" class="form-control" id="gifInput" placeholder="Add New Catagory">
-        </div>
-        <button type="submit" id = 'newGifValue' class="btn btn-primary">Add</button>
-    </form>
-    </div>
+
     
-    <div id = 'gifArea'></div>
+    <div class = 'container-fluid'>
+    <div id = 'buttonsArea' class = 'mb-4'></div>
+        <form>
+            <div class="form-group col-md-3">          
+                <input type="text" class="form-control" id="gifInput" placeholder="Add New Catagory">
+            </div>
+            <button type="submit" id = 'newGifValue' class="btn btn-primary">Add</button>
+        </form>
+    
+        <div id = 'gifArea' class = 'row'></div>
+    
+    </div> <!--End of CONTAINER-->
+    
         
     
     <!-- Optional JavaScript -->
