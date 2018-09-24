@@ -36,7 +36,9 @@ $('button').on('click', function() {
             var showImage = $('<img>');
             showImage.addClass('mb-4');
             showImage.attr('src', returnData[i].images.fixed_height_still.url);
+            showImage.attr('data-still', returnData[i].images.fixed_height_still.url);
             showImage.attr('data-animate', returnData[i].images.fixed_height.url);
+            showImage.attr('data-state', 'still');
             showImage.addClass('gif');
 
             var rating = $('<p>');
@@ -45,8 +47,22 @@ $('button').on('click', function() {
             //showImage.prepend(rating);
             $('#gifArea').append(showImage, rating);
         }
+        $('.gif').on('click', function(){
+            var state = $(this).attr('data-state');
+        
+            if(state === 'still'){
+                $(this).attr('src', $(this).attr('data-animate'));
+                $(this).attr("data-state", "animate");
+            }else{
+                $(this).attr("src", $(this).attr("data-still"));
+                $(this).attr("data-state", "still");
+            }
+            
+        })
     });
 });
+
+
 
 
 $('#newGifValue').on('click', function(event){
@@ -57,6 +73,7 @@ $('#newGifValue').on('click', function(event){
     makeNewButtons();
 })
     
+
 
 
 
