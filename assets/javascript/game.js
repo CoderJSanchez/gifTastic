@@ -1,48 +1,13 @@
-//rUGDSJQ6ygNJgDewflUlFnfEcjceivwp
 
+//array of gif catagories
+const catagoryArray = ['cats', 'dogs', 'birds', 'thumbs up', 'winner', 'hey cutie', 'oh yeah', 'friends'];
 
-///////////////////////////////////////////////////////////////
-
-const catagoryArray = ['cats', 'dogs', 'birds'];
-const dropDownArray = ['one', 'two', 'three'];
+//console for testing 
 console.log(catagoryArray);
 
-function newNavItem(item) {
-   var mainDropDown = $('<li>');
-   mainDropDown.addClass("nav-item dropdown");
-   var catagDropDown = $('<a>');
-   catagDropDown.addClass("nav-link dropdown-toggle");
-   catagDropDown.attr('id', 'navbarDropdown');
-   catagDropDown.attr('role', 'button');
-   catagDropDown.attr('data-toggle', 'dropdown');
-   catagDropDown.attr('aria-haspopup', 'true');
-   catagDropDown.attr('aria-expanded', 'false');
-   catagDropDown.text(item);
-   mainDropDown.append(catagDropDown);
-   $('#theDropDown').append(mainDropDown);
 
 
-   // add a for loop to a new array
-   for(let i = 0; i < dropDownArray.length; i++){
-    var dropwDownDiv = $('<div>');
-   dropwDownDiv.addClass('dropdown-menu');
-   dropwDownDiv.attr('aria-labelledby', 'navbarDropdown');
-   var dropDownDivButton = $('<button>');
-   dropDownDivButton.addClass('dropdown-item');
-   dropDownDivButton.text(dropDownArray);
-   dropwDownDiv.append(dropDownDivButton);
-   catagDropDown.append(dropwDownDiv);
-   
-   }
-   console.log(dropDownArray);
-   
-
-}
-
-newNavItem('lizards');
-
-
-
+//function that loops through the array and dynamically creates the buttons on the page
 function makeNewButtons() {
     $('#buttonsArea').empty();
     for (let i = 0; i < catagoryArray.length; i++) {
@@ -52,11 +17,14 @@ function makeNewButtons() {
         newButton.text(catagoryArray[i]).val();
         $('#buttonsArea').append(newButton);
     }
+    //this function is called here so when new buttons are added by user, the AJAX call works for the button
     goGetGif();
 }
 
 makeNewButtons();
 
+
+//this takes the text from the input box and creates pushes it to the array of catagories
 $('#newGifValue').on('click', function (event) {
     event.preventDefault();
     var newGif = $('#gifInput').val();
@@ -66,6 +34,7 @@ $('#newGifValue').on('click', function (event) {
     console.log(catagoryArray);
 })
 
+
 function goGetGif() {
 
     $('.catagoryButton').on('click', function () {
@@ -73,7 +42,7 @@ function goGetGif() {
 
         var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=rUGDSJQ6ygNJgDewflUlFnfEcjceivwp&q='
             + searchItem
-            + '&limit=10&offset=0&rating=G&lang=en'
+            + '&limit=10&offset=0&rating=G&rating=R&lang=en'
 
         $.ajax({
             url: queryURL,
@@ -94,13 +63,41 @@ function goGetGif() {
                 showImage.addClass('gif');
                 dropGifs.append(showImage);
 
+                //add a rating for each gif
                 var rating = $('<p>');
                 rating.text('Rating: ' + returnData[i].rating.toUpperCase());
                 rating.addClass('mb-0');
                 dropGifs.prepend(rating);
-                $('#gifArea').append(dropGifs);
+                $('#gifArea').prepend(dropGifs);
 
+                //create a button but immediately hide it for each gif so they can be moved to favs            
+                var favButton = $('<button>');
+                favButton.hide();
+                favButton.attr('type', 'button');
+                favButton.attr('data-link', returnData[i].images.fixed_height.url);
+                favButton.addClass('favoriteButton btn btn-primary btn-sm');
+                favButton.text('Favorite');
+                dropGifs.prepend(favButton);
+
+                //shows the blue 'favorite' buttons 
+                $('#myFavoriteGifs').on('click', function(e){
+                    e.preventDefault();
+                    $('.favoriteButton').show();
+                })   
+                
             }
+
+            //click event to move/add the gif to favorites section
+            $('.favoriteButton').on('click', function(e){
+                console.log(this); 
+                e.preventDefault();
+                var favGifImg = $('<img>');
+                favGifImg.attr('src', $(this).attr('data-link'));
+                $('#dropFavGifs').append(favGifImg);
+                $(this).hide();
+            })
+
+            //turns the gifs on and off
             $('.gif').on('click', function () {
                 var state = $(this).attr('data-state');
 
@@ -116,6 +113,8 @@ function goGetGif() {
         });
     });
 }
+
+
 
 
 
