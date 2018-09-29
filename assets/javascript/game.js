@@ -6,6 +6,8 @@ const catagoryArray = ['cats', 'dogs', 'birds', 'thumbs up', 'winner', 'hey cuti
 console.log(catagoryArray);
 
 
+$('#doneButton').hide();
+$('#gifFavs').hide();
 
 //function that loops through the array and dynamically creates the buttons on the page
 function makeNewButtons() {
@@ -13,15 +15,48 @@ function makeNewButtons() {
     for (let i = 0; i < catagoryArray.length; i++) {
         var newButton = $('<button>');
         newButton.attr('data-name', catagoryArray[i]);
-        newButton.addClass('btn btn-outline-info catagoryButton')
+        newButton.addClass('btn btn-outline-info btn-lg catagoryButton')
         newButton.text(catagoryArray[i]).val();
         $('#buttonsArea').append(newButton);
+
+        $('.catagoryButton').on('click', function (e) {
+            e.preventDefault();
+            $('#myFavoriteGifs').show();
+        })
     }
     //this function is called here so when new buttons are added by user, the AJAX call works for the button
     goGetGif();
 }
 
 makeNewButtons();
+
+
+
+var checkField;
+
+//checking the length of the value of message and assigning to a variable(checkField) on load
+checkField = $("#gifInput").val().length;
+
+var enableDisableButton = function () {
+    if (checkField > 0) {
+        $('#newGifValue').removeAttr("disabled");
+    }
+    else {
+        $('#newGifValue').attr("disabled", "disabled");
+    }
+}
+
+//calling enableDisableButton() function on load
+enableDisableButton();
+
+$('#gifInput').keyup(function () {
+    //checking the length of the value of message and assigning to the variable(checkField) on keyup
+    checkField = $("#gifInput").val().length;
+    //calling enableDisableButton() function on keyup
+    enableDisableButton();
+});
+
+
 
 
 //this takes the text from the input box and creates pushes it to the array of catagories
@@ -32,7 +67,9 @@ $('#newGifValue').on('click', function (event) {
     catagoryArray.push(newGif);
     makeNewButtons();
     console.log(catagoryArray);
+
 })
+
 
 
 function goGetGif() {
@@ -51,6 +88,7 @@ function goGetGif() {
             var returnData = response.data;
             console.log(response);
 
+            //for loop to generate a div and img. Each image gets data from response
             for (var i = 0; i < returnData.length; i++) {
                 var dropGifs = $('<div>');
                 dropGifs.addClass('col-md-3');
@@ -66,7 +104,7 @@ function goGetGif() {
                 //add a rating for each gif
                 var rating = $('<p>');
                 rating.text('Rating: ' + returnData[i].rating.toUpperCase());
-                rating.addClass('mb-0');
+                rating.addClass('mb-0 ratingText');
                 dropGifs.prepend(rating);
                 $('#gifArea').prepend(dropGifs);
 
@@ -79,23 +117,40 @@ function goGetGif() {
                 favButton.text('Favorite');
                 dropGifs.prepend(favButton);
 
+
+
                 //shows the blue 'favorite' buttons 
-                $('#myFavoriteGifs').on('click', function(e){
+                $('#myFavoriteGifs').on('click', function (e) {
                     e.preventDefault();
                     $('.favoriteButton').show();
-                })   
-                
+                    $('#doneButton').show();
+                })
+
+                //hides all the blue fav buttons
+                $('#doneButton').on('click', function (e) {
+                    e.preventDefault();
+                    $('.favoriteButton').hide();
+                    $('#doneButton').hide();
+                })
+
             }
 
+
+
             //click event to move/add the gif to favorites section
-            $('.favoriteButton').on('click', function(e){
-                console.log(this); 
+            $('.favoriteButton').on('click', function (e) {
+                console.log(this);
                 e.preventDefault();
                 var favGifImg = $('<img>');
+                favGifImg.addClass('gif');
                 favGifImg.attr('src', $(this).attr('data-link'));
                 $('#dropFavGifs').append(favGifImg);
                 $(this).hide();
+                $('#gifFavs').show();
+
             })
+
+
 
             //turns the gifs on and off
             $('.gif').on('click', function () {
